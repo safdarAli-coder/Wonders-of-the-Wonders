@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WOW – Wonders of the World</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;600;700;800&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cdot"></div>
+<div id="loader"><div class="loader-logo">WOW</div><div class="loader-sub">Wonders of the World</div><div class="loader-bar"><div class="loader-fill"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<!-- Wonder Modal -->
+<div class="modal-bg" id="modalBg" onclick="closeMod(event)">
+  <div class="mbox">
+    <button class="mclose" onclick="document.getElementById('modalBg').classList.remove('open')">✕</button>
+    <img id="mimg" src="" alt="" class="mimg">
+    <div class="mbody"><div class="mbadge" id="mbadge"></div><div class="mname" id="mname"></div><div class="mloc" id="mloc"></div><p class="mdesc" id="mdesc"></p><p class="mhist" id="mhist"></p><div class="mfacts" id="mfacts"></div></div>
+  </div>
+</div>
+
+<!-- Gallery Lightbox -->
+<div class="glightbox" id="glightbox">
+  <button class="glightbox-close" onclick="closeLightbox()">✕</button>
+  <div class="glightbox-nav">
+    <button class="gnav-btn" onclick="lbNav(-1)">&#8592;</button>
+    <button class="gnav-btn" onclick="lbNav(1)">&#8594;</button>
+  </div>
+  <img id="lbImg" src="" alt="">
+  <div class="glightbox-cap" id="lbCap"></div>
+  <div class="glightbox-idx" id="lbIdx"></div>
+</div>
+
+<!-- Download overlay -->
+<div class="pdf-overlay" id="pdfOverlay">
+  <div class="pdf-box">
+    <div style="font-size:2.8rem;margin-bottom:0.8rem;" id="pdfIcon">📄</div>
+    <h3 id="pdfTitle">Preparing Download</h3>
+    <p id="pdfDesc">Generating your document from all seven wonders data...</p>
+    <div class="pdf-progress"><div class="pdf-bar" id="pdfBar"></div></div>
+    <div class="pdf-status" id="pdfStatus">Initialising...</div>
+    <button class="pdf-close-btn" id="pdfCloseBtn" onclick="closePdfOverlay()" style="display:none;">✓ Complete — Close</button>
+  </div>
+</div>
+
+<nav id="nav">
+  <div class="nav-logo">WOW<sub>Wonders of the World</sub></div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li><li><a href="#wonders">Wonders</a></li><li><a href="#gallery">Gallery</a></li>
+    <li><a href="#about">History</a></li><li><a href="#travel">Travel</a></li>
+    <li><a href="#feedback">Feedback</a></li><li><a href="#contact">Contact</a></li><li><a href="#sitemap">Site Map</a></li>
+  </ul>
+  <button class="nav-btn" onclick="g('download')">⬇ Download Guide</button>
+</nav>
+
+<section id="home">
+  <div id="heroSlides"></div>
+  <div class="slide-dots" id="slideDots"></div>
+  <div class="slide-counter" id="slideCounter"></div>
+  <div class="slide-label" id="slideLabel"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Seven Wonders of the Modern World</div>
+    <h1 class="hero-title">Wonders of<br>the <em>World</em></h1>
+    <p class="hero-subtitle">Journey through time — discover the most breathtaking monuments ever created by human civilization across seven nations</p>
+    <div class="hero-btns"><a href="#wonders" class="btn-gold">✦ Explore All Wonders</a><a href="#gallery" class="btn-outline">View Gallery</a></div>
+  </div>
+  </section>
+
+<div class="stats-band reveal">
+  <div class="stat-item"><span class="stat-num" data-target="7">0</span><span class="stat-lbl">New Wonders</span></div>
+  <div class="stat-item"><span class="stat-num" data-target="100">0</span><span class="stat-lbl">Million Votes</span></div>
+  <div class="stat-item"><span class="stat-num" data-target="2500">0</span><span class="stat-lbl">Years of History</span></div>
+  <div class="stat-item"><span class="stat-num" data-target="50">0</span><span class="stat-lbl">Million Visitors/yr</span></div>
+</div>
+
+<section id="wonders">
+  <div class="sh reveal"><div class="s-tag">New Seven Wonders</div><h2 class="s-title">The <em>Greatest</em> Monuments</h2><p class="s-desc">Chosen by over 100 million votes — these seven marvels represent the peak of human achievement</p></div>
+  <div class="wonders-grid" id="wgrid"></div>
+</section>
+
+<section id="gallery">
+  <div class="sh reveal"><div class="s-tag">Visual Journey</div><h2 class="s-title">Photo <em>Gallery</em></h2><p class="s-desc">Select a wonder below, then click any photo to browse all 10 images in fullscreen</p></div>
+  <div class="gallery-cats reveal" id="galCats"></div>
+  <div class="gal-grid" id="galGrid"></div>
+  <div class="gal-more"><button class="gal-more-btn" id="galMoreBtn" onclick="openAllPhotos()">View All 10 Photos →</button></div>
+</section>
+
+<section id="about">
+  <div class="sh reveal"><div class="s-tag">Our Story</div><h2 class="s-title">History Behind the <em>Wonders</em></h2><p class="s-desc">All seven wonders explored in depth — image on the left, full history on the right, alternating beautifully</p></div>
+  <div class="wonder-history-list" id="historyList"></div>
+</section>
+
+<section id="travel">
+  <div class="sh reveal"><div class="s-tag">Plan Your Visit</div><h2 class="s-title">Travel & <em>Transport</em></h2><p class="s-desc">Everything you need to plan the perfect journey to these magnificent destinations</p></div>
+  <div class="travel-grid">
+    <div class="tcard reveal d1">
+      <img class="tcard-img" src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500&q=80" alt="Flights">
+      <h3>✈️ Flights</h3>
+      <p>Book direct and connecting flights to all seven wonder destinations. Compare prices across major airlines and budget carriers for the best deals.</p>
+      <a class="tlink" href="https://www.skyscanner.com" target="_blank" rel="noopener noreferrer">Search Flights →</a>
+    </div>
+    <div class="tcard reveal d2">
+      <img class="tcard-img" src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=500&q=80" alt="Bus">
+      <h3>🚌 Bus Routes</h3>
+      <p>Affordable regional bus services connect major cities to wonder sites. Experience local culture and scenery along the way.</p>
+      <a class="tlink" href="https://www.rome2rio.com" target="_blank" rel="noopener noreferrer">View Routes →</a>
+    </div>
+    <div class="tcard reveal d3">
+      <img class="tcard-img" src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=500&q=80" alt="Train">
+      <h3>🚂 Train Journeys</h3>
+      <p>Scenic rail routes to Machu Picchu and the Taj Mahal are once-in-a-lifetime experiences not to be missed by any true explorer.</p>
+      <a class="tlink" href="https://www.raileurope.com" target="_blank" rel="noopener noreferrer">View Trains →</a>
+    </div>
+    <div class="tcard reveal d4">
+      <img class="tcard-img" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&q=80" alt="Hotels">
+      <h3>🏨 Hotels & Stay</h3>
+      <p>Curated luxury and budget accommodation near each wonder — from heritage palaces to charming boutique guesthouses with stunning views.</p>
+      <a class="tlink" href="https://www.booking.com" target="_blank" rel="noopener noreferrer">Find Hotels →</a>
+    </div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="sh reveal"><div class="s-tag">Free Resources</div><h2 class="s-title">Download <em>Guide</em></h2></div>
+  <div class="dl-inner reveal">
+    <p>Download the complete historical documentation of all seven wonders — detailed construction stories, cultural significance, and expert travel tips. Available in PDF and DOC formats for offline reading and research.</p>
+    <div class="dl-cards">
+      <div class="dlcard">
+        <span class="dl-icon">📄</span>
+        <h4>Complete History Guide</h4>
+        <small>Download as PDF • 4.2 MB</small>
+        <button class="dl-btn" onclick="triggerDownload('pdf','Complete History Guide','📄')">⬇ Download History PDF</button>
+      </div>
+      <div class="dlcard">
+        <span class="dl-icon">📝</span>
+        <h4>Detailed Documentation</h4>
+        <small>Download as DOC • 2.8 MB</small>
+        <button class="dl-btn" onclick="triggerDownload('doc','Detailed Documentation','📝')">⬇ Download DOC</button>
+      </div>
+      <div class="dlcard">
+        <span class="dl-icon">🗺️</span>
+        <h4>World Travel Map</h4>
+        <small>Download as PDF • 1.9 MB</small>
+        <button class="dl-btn" onclick="triggerDownload('map','World Travel Map','🗺️')">⬇ Download Map PDF</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="feedback">
+  <div class="sh reveal"><div class="s-tag">Share Your Experience</div><h2 class="s-title">Leave Your <em>Feedback</em></h2><p class="s-desc">We love hearing from visitors and explorers from around the world</p></div>
+  <div class="fb-box reveal">
+    <div class="form-row">
+      <div class="fg"><label>Full Name</label><input type="text" placeholder="Your name" id="fn"></div>
+      <div class="fg"><label>Email Address</label><input type="email" placeholder="your@email.com" id="fe"></div>
+    </div>
+    <div class="fg"><label>Which Wonder Did You Visit?</label>
+      <select id="fw"><option value="">— Select a Wonder —</option><option>Taj Mahal, India</option><option>Machu Picchu, Peru</option><option>Great Wall of China</option><option>The Colosseum, Italy</option><option>Petra, Jordan</option><option>Christ the Redeemer, Brazil</option><option>Chichen Itza, Mexico</option></select>
+    </div>
+    <div class="fg"><label>Rate Your Experience</label><div class="star-row" id="stars"><span class="star" onclick="rate(1)">★</span><span class="star" onclick="rate(2)">★</span><span class="star" onclick="rate(3)">★</span><span class="star" onclick="rate(4)">★</span><span class="star" onclick="rate(5)">★</span></div></div>
+    <div class="fg"><label>Your Message</label><textarea placeholder="Share your experience, memories or suggestions..." id="fm"></textarea></div>
+    <button class="sub-btn" onclick="subFeed()">✦ Submit Feedback ✦</button>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="sh reveal"><div class="s-tag">Get In Touch</div><h2 class="s-title">Contact <em>Us</em></h2></div>
+  <div class="contact-wrap">
+    <div class="reveal rl">
+      <img class="cimg" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=700&q=80" alt="Travel">
+      <div class="citem"><div class="cicon">📧</div><div class="ctext"><small>Email</small><p>info@wondersofworld.org</p></div></div>
+      <div class="citem"><div class="cicon">📞</div><div class="ctext"><small>Phone</small><p>+1 (800) 777-0007</p></div></div>
+      <div class="citem"><div class="cicon">📍</div><div class="ctext"><small>Location</small><p>Global Heritage Office, Geneva, Switzerland</p></div></div>
+      <div class="citem"><div class="cicon">🕐</div><div class="ctext"><small>Hours</small><p>Mon – Fri: 9:00 AM – 6:00 PM (GMT)</p></div></div>
+    </div>
+    <div class="cform-box reveal rr">
+      <div class="s-tag" style="text-align:left;justify-content:flex-start;">Send a Message</div>
+      <div class="s-tag" style="display:none;"></div>
+      <h3 class="s-title" style="font-size:1.8rem;">We'd Love to <em>Hear</em><br>From You</h3>
+      <div style="height:1.5rem;"></div>
+      <div class="fg"><label>Full Name</label><input type="text" placeholder="Your name" id="cn"></div>
+      <div class="fg"><label>Email</label><input type="email" placeholder="your@email.com" id="ce"></div>
+      <div class="fg"><label>Subject</label><input type="text" placeholder="Queries / Information..." id="cs"></div>
+      <div class="fg"><label>Message</label><textarea placeholder="How can we help?" id="cm" style="min-height:100px;"></textarea></div>
+      <button class="send-btn" onclick="subContact()">Send Message ✦</button>
+    </div>
+  </div>
+</section>
+
+<section id="sitemap">
+  <div class="sh reveal"><div class="s-tag">Navigation</div><h2 class="s-title">Site <em>Map</em></h2></div>
+  <div class="sm-grid reveal">
+    <div class="sm-col"><h4>Main Pages</h4><ul><li><a href="#home">Home</a></li><li><a href="#about">About WOW</a></li><li><a href="#wonders">Seven Wonders</a></li><li><a href="#gallery">Gallery</a></li></ul></div>
+    <div class="sm-col"><h4>Wonders</h4><ul><li><a href="#wonders">Taj Mahal</a></li><li><a href="#wonders">Machu Picchu</a></li><li><a href="#wonders">Great Wall</a></li><li><a href="#wonders">Colosseum</a></li><li><a href="#wonders">Petra</a></li><li><a href="#wonders">Christ Redeemer</a></li><li><a href="#wonders">Chichen Itza</a></li></ul></div>
+    <div class="sm-col"><h4>Resources</h4><ul><li><a href="#travel">Travel Guide</a></li><li><a href="#download">Download PDF</a></li><li><a href="#download">Download DOC</a></li><li><a href="#gallery">Photo Gallery</a></li></ul></div>
+    <div class="sm-col"><h4>Connect</h4><ul><li><a href="#feedback">Feedback</a></li><li><a href="#contact">Contact Us</a></li><li><a href="#contact">Queries</a></li><li><a href="#sitemap">Site Map</a></li></ul></div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-logo">WOW</div>
+  <div class="foot-tag">Wonders of the World — Celebrating Human Greatness Since Time Immemorial</div>
+  <div class="foot-nav"><a href="#home">Home</a><a href="#wonders">Wonders</a><a href="#gallery">Gallery</a><a href="#about">History</a><a href="#travel">Travel</a><a href="#feedback">Feedback</a><a href="#contact">Contact</a><a href="#sitemap">Site Map</a></div>
+  <div class="foot-line"></div>
+  <p class="foot-copy">© 2026 Wonders of the World (WOW). Built with HTML5 & JavaScript. Compatible with all modern browsers.</p>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
